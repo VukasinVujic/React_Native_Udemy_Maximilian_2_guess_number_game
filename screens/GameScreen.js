@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 import NumberContainer from "../components/NumberContainer";
 import Card from "../components/Card";
@@ -36,6 +37,9 @@ const renderListItem = (listLength, itemData) => (
   </View>
 );
 const GameScreen = (props) => {
+  // Replacment for React Native Dimension, expos ScreenOriantation , it works only before the game starts
+  // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+
   const initialGuess = generateRandomBetween(1, 100, props.userChoice);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
@@ -142,12 +146,7 @@ const GameScreen = (props) => {
     <View style={styles.screen}>
       <Text style={DefaultStyles.title}>Opponent's Guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
-      <Card
-        style={[
-          ...styles.buttonContainer,
-          { marginTop: Dimensions.get("window").height > 600 ? 20 : 5 },
-        ]}
-      >
+      <Card style={styles.buttonContainer}>
         <MainButton onPress={nextGuessHandler.bind(this, "lower")}>
           <Ionicons name="md-remove" size={24} color="white" />
         </MainButton>
@@ -181,7 +180,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    // marginTop: Dimensions.get("window").height > 600 ? 20 : 5,
+    marginTop: Dimensions.get("window").height > 600 ? 20 : 5,
     width: 400,
     maxWidth: "90%",
   },
